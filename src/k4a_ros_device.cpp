@@ -756,6 +756,7 @@ k4a_result_t K4AROSDevice::getImuFrame(const k4a_imu_sample_t& sample, std::shar
   return K4A_RESULT_SUCCEEDED;
 }
 
+
 #if defined(K4A_BODY_TRACKING)
 k4a_result_t K4AROSDevice::getBodyMarker(const k4abt_body_t& body, std::shared_ptr<visualization_msgs::msg::Marker> marker_msg, int jointType,
                                          rclcpp::Time capture_time)
@@ -768,7 +769,7 @@ k4a_result_t K4AROSDevice::getBodyMarker(const k4abt_body_t& body, std::shared_p
 
   // Set the lifetime to 0.25 to prevent flickering for even 5fps configurations.
   // New markers with the same ID will replace old markers as soon as they arrive.
-  marker_msg->lifetime = rclcpp::Duration(0.25);
+  marker_msg->lifetime = rclcpp::Duration(0,25000000);
   marker_msg->id = body.id * 100 + jointType;
   marker_msg->type = Marker::SPHERE;
 
