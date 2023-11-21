@@ -46,8 +46,8 @@ add_executable(${PROJECT_NAME}_node
   src/k4a_calibration_transform_data.cpp
   )
 
-ament_target_dependencies(${PROJECT_NAME}_node rclcpp 
-  std_msgs 
+ament_target_dependencies(${PROJECT_NAME}_node rclcpp
+  std_msgs
   sensor_msgs
   visualization_msgs
   image_transport

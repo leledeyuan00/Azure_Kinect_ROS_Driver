@@ -79,7 +79,7 @@ def generate_launch_description():
         description="Resolution at which to run the color camera. Valid options: 720P, 1080P, 1440P, 1536P, 2160P, 3072P"),
     DeclareLaunchArgument(
         'fps',
-        default_value="5",
+        default_value="30",
         description="FPS to run both cameras at. Valid options are 5, 15, and 30"),
     DeclareLaunchArgument(
         'point_cloud',

@@ -182,37 +182,7 @@ K4AROSDevice::K4AROSDevice()
       RCLCPP_WARN_EXPRESSION(this->get_logger(),k4a_device_count > 1, "Multiple sensors connected! Picking first sensor.");
     }
 
-    for (uint32_t i = 0; i < k4a_device_count; i++)
-    {
-      k4a::device device;
-      try
-      {
-        device = k4a::device::open(i);
-      }
-      catch (exception const&)
-      {
-        RCLCPP_ERROR_STREAM(this->get_logger(),"Failed to open K4A device at index " << i);
-        continue;
-      }
-
-      RCLCPP_INFO_STREAM(this->get_logger(),"K4A[" << i << "] : " << device.get_serialnum());
-
-      // Try to match serial number
-      if (params_.sensor_sn != "")
-      {
-        if (device.get_serialnum() == params_.sensor_sn)
-        {
-          k4a_device_ = std::move(device);
-          break;
-        }
-      }
-      // Pick the first device
-      else if (i == 0)
-      {
-        k4a_device_ = std::move(device);
-        break;
-      }
-    }
+    k4a_device_ = k4a::device::open(K4A_DEVICE_DEFAULT);
 
     if (!k4a_device_)
     {
@@ -1197,7 +1167,8 @@ void K4AROSDevice::bodyPublisherThread()
       }
       else
       {
-        auto capture_time = timestampToROS(body_frame.get_device_timestamp());
+        // auto capture_time = timestampToROS(body_frame.get_device_timestamp());
+        auto capture_time = this->now();
         
         if (this->count_subscribers("body_tracking_data") > 0)
         {
