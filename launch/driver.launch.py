@@ -75,7 +75,7 @@ def generate_launch_description():
         description="The format of RGB camera. Valid options: bgra, jpeg"),
     DeclareLaunchArgument(
         'color_resolution',
-        default_value="1080P",
+        default_value="720P",
         description="Resolution at which to run the color camera. Valid options: 720P, 1080P, 1440P, 1536P, 2160P, 3072P"),
     DeclareLaunchArgument(
         'fps',
@@ -137,6 +137,10 @@ def generate_launch_description():
         'subordinate_delay_off_master_usec',
         default_value="0",
         description="Delay subordinate camera off master camera by specified amount in usec."),
+    DeclareLaunchArgument(
+        'tf_prefix',
+        default_value="track_",
+        description="tf_prefix for the tf2_ros::TransformBroadcaster."),
     launch_ros.actions.Node(
         package='azure_kinect_ros_driver',
         executable='node',
@@ -161,33 +165,35 @@ def generate_launch_description():
             {'ir_mono8_scaling_factor': launch.substitutions.LaunchConfiguration('ir_mono8_scaling_factor')},
             {'imu_rate_target': launch.substitutions.LaunchConfiguration('imu_rate_target')},
             {'wired_sync_mode': launch.substitutions.LaunchConfiguration('wired_sync_mode')},
-            {'subordinate_delay_off_master_usec': launch.substitutions.LaunchConfiguration('subordinate_delay_off_master_usec')}]),
+            {'subordinate_delay_off_master_usec': launch.substitutions.LaunchConfiguration('subordinate_delay_off_master_usec')},
+            {'tf_prefix': launch.substitutions.LaunchConfiguration('tf_prefix')},
+            ]),
     # If flag overwrite_robot_description is set:
-    launch_ros.actions.Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        parameters = [{'robot_description' : urdf}],
-        condition=conditions.IfCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
-    launch_ros.actions.Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher',
-        arguments=[urdf_path],
-        condition=conditions.IfCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
+    # launch_ros.actions.Node(
+    #     package='robot_state_publisher',
+    #     executable='robot_state_publisher',
+    #     name='robot_state_publisher',
+    #     parameters = [{'robot_description' : urdf}],
+    #     condition=conditions.IfCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
+    # launch_ros.actions.Node(
+    #     package='joint_state_publisher',
+    #     executable='joint_state_publisher',
+    #     name='joint_state_publisher',
+    #     arguments=[urdf_path],
+    #     condition=conditions.IfCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
     # If flag overwrite_robot_description is not set:
-    launch_ros.actions.Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        parameters = [{'robot_description' : urdf}],
-        remappings=remappings,
-        condition=conditions.UnlessCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
-    launch_ros.actions.Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher',
-        arguments=[urdf_path],
-        remappings=remappings,
-        condition=conditions.UnlessCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
+    # launch_ros.actions.Node(
+    #     package='robot_state_publisher',
+    #     executable='robot_state_publisher',
+    #     name='robot_state_publisher',
+    #     parameters = [{'robot_description' : urdf}],
+    #     remappings=remappings,
+    #     condition=conditions.UnlessCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
+    # launch_ros.actions.Node(
+    #     package='joint_state_publisher',
+    #     executable='joint_state_publisher',
+    #     name='joint_state_publisher',
+    #     arguments=[urdf_path],
+    #     remappings=remappings,
+    #     condition=conditions.UnlessCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
     ])
