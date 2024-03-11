@@ -145,6 +145,7 @@ def generate_launch_description():
         package='azure_kinect_ros_driver',
         executable='node',
         output='screen',
+        namespace='track',
         parameters=[
             {'depth_enabled': launch.substitutions.LaunchConfiguration('depth_enabled')},
             {'depth_mode': launch.substitutions.LaunchConfiguration('depth_mode')},
