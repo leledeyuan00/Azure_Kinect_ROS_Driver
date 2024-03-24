@@ -75,7 +75,7 @@ def generate_launch_description():
         description="The format of RGB camera. Valid options: bgra, jpeg"),
     DeclareLaunchArgument(
         'color_resolution',
-        default_value="720P",
+        default_value="1080P",
         description="Resolution at which to run the color camera. Valid options: 720P, 1080P, 1440P, 1536P, 2160P, 3072P"),
     DeclareLaunchArgument(
         'fps',
@@ -145,6 +145,7 @@ def generate_launch_description():
         package='azure_kinect_ros_driver',
         executable='node',
         output='screen',
+        namespace='track',
         parameters=[
             {'depth_enabled': launch.substitutions.LaunchConfiguration('depth_enabled')},
             {'depth_mode': launch.substitutions.LaunchConfiguration('depth_mode')},
